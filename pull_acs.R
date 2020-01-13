@@ -18,6 +18,9 @@
 
 acs_pull <- function(year = 2018, geo = "state", span = "5", tab = "B01001", vars = NULL, state = NULL, county = NULL, key = "YOUR_KEY_HERE", save = TRUE, dir = ""){
   
+  require(censusapi)
+  require(tidycensus)
+  
   if(tail(unlist(strsplit(dir, "")), 1) != "/"){
     dir <- paste0(dir, "/")
   }
