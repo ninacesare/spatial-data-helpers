@@ -16,7 +16,7 @@
 #' acs_pull(year = 2018, geo = "state", span = "5", tab = "B01001", vars = NULL, state = "California", county = NULL, key = "YOUR_KEY_HERE", save = TRUE, dir = "C:/MyACSdata")
 
 
-acs_pull <- function(year = 2018, geo = "state", span = "5", tab = "B01001", vars = NULL, state = NULL, county = NULL, key = "YOUR_KEY_HERE", save = TRUE, dir = ""){
+acs_pull <- function(year = 2018, geo = "state", span = 5, tab = "B01001", vars = NULL, state = NULL, county = NULL, key = "YOUR_KEY_HERE", save = TRUE, dir = ""){
   
   require(censusapi)
   require(tidycensus)
@@ -24,6 +24,8 @@ acs_pull <- function(year = 2018, geo = "state", span = "5", tab = "B01001", var
   if(tail(unlist(strsplit(dir, "")), 1) != "/"){
     dir <- paste0(dir, "/")
   }
+  
+  span <- as.character(span)
   
   data <- get_acs(geography = geo, variables = vars, table = tab,
                   cache_table = FALSE, year = year, endyear = NULL,
@@ -47,7 +49,7 @@ acs_pull <- function(year = 2018, geo = "state", span = "5", tab = "B01001", var
   }
   
   tab_vars <- data.frame(name = unique(data$variable))
-  all_vars <- load_variables(2018, "acs5", cache = TRUE)
+  all_vars <- load_variables(year, paste0("acs", span), cache = TRUE)
   metadata <- merge(all_vars, tab_vars, by = "name", all = FALSE)
   metadata <- metadata[,c(1,2)] #names will be different than what's downloaded through ACS
   
