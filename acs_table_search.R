@@ -18,8 +18,8 @@
 
 acs_table_search <- function(year = 2018, span = 5, keyword = ""){
   
-  require(censusapi)
-  require(tidycensus)
+  suppressWarnings(suppressMessages(require(censusapi)))
+  suppressWarnings(suppressMessages(require(tidycensus)))
   
   span <- as.character(span)
   
