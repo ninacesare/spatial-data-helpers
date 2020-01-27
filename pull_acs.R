@@ -38,7 +38,7 @@ acs_pull <- function(year = 2018, geo = "state", span = 5, tab = "B01001", vars 
   
   for(i in NAMES){
     data_part <- data[which(data$NAME == i),]
-    estimates <- t(data_part$estimates)
+    estimates <- t(data_part$estimate)
     names(estimates) <- data_part$variable
     moes <- t(data_part$moe)
     names(moes) <- paste0(data_part$variable, "_moe")
@@ -47,6 +47,8 @@ acs_pull <- function(year = 2018, geo = "state", span = 5, tab = "B01001", vars 
     row <- c(GEOID, NAME, estimates, moes)
     data_reworked <- rbind(data_reworked, row)
   }
+  
+  data_reworked <- as.data.frame(data_reworked, row.names = FALSE)
   
   tab_vars <- data.frame(name = unique(data$variable))
   all_vars <- load_variables(year, paste0("acs", span), cache = TRUE)
@@ -68,17 +70,13 @@ acs_pull <- function(year = 2018, geo = "state", span = 5, tab = "B01001", vars 
       write.csv(data, paste0(dir, "/Data/ACS_", paste(strsplit(as.character(year), "")[[1]][3:4], collapse = ""), "_", span, "YR_", tab, "_with_ann.csv"), row.names = FALSE)
       write.csv(metadata, paste0(dir, "/Metadata/ACS_", paste(strsplit(as.character(year), "")[[1]][3:4], collapse = ""), "_", span, "YR_", tab, "_metadata.csv"), row.names = FALSE)      
     }
-    allDat <- list(data, metadata)
+    allDat <- list(data_reworked, metadata)
     return(allDat)
   }
   if(save == FALSE){
-    allDat <- list(data, metadata)
+    allDat <- list(data_reworked, metadata)
     return(allDat)
   }
 }
-
-
-
-
 
 
